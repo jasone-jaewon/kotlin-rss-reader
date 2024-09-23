@@ -2,8 +2,7 @@ package rss.model
 
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import util.parse
 
 class RssNodes(
     private val nodes: NodeList
@@ -14,13 +13,15 @@ class RssNodes(
             val item = nodes.item(i) as Element
             val title = item.getElementsByTagName("title").item(0).textContent
             val link = item.getElementsByTagName("link").item(0).textContent
-            val createdBy = item.getElementsByTagName("dc:creator").item(0).textContent
+            val creator = item.getElementsByTagName("dc:creator")
+            val createdBy = if (creator.length > 0) {
+                creator.item(0).textContent
+            } else {
+                null
+            }
+
             val createdAt = item.getElementsByTagName("pubDate").item(0).textContent
-
-            val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z")
-            val at = ZonedDateTime.parse(createdAt, formatter)
-
-            Post(title, link, at, createdBy)
+            Post(title, link, parse(createdAt), createdBy)
         }
     }
 }
