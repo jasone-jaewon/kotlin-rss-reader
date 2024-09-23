@@ -1,12 +1,9 @@
 package rss
 
-import rss.model.Post
+import rss.model.RssNodes
 
 object RssReader {
-    fun read(url: String): Post {
-
-
-
+    fun read(url: String): RssNodes {
         TODO()
     }
 }
