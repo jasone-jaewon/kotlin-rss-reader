@@ -2,9 +2,9 @@ package rss.model
 
 import java.time.ZonedDateTime
 
-class Post(
-    private val title: String,
-    private val link: String,
-    private val createdAt: ZonedDateTime,
-    private val createdBy: String,
+data class Post(
+    val title: String,
+    val link: String,
+    val createdAt: ZonedDateTime,
+    val createdBy: String?,
 )
