@@ -1,5 +1,5 @@
-import rss.PostRssReader
+import rss.RssReader
 
 fun main() {
-    PostRssReader.read()
+    RssReader.read()
 }

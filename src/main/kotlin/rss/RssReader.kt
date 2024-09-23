@@ -2,8 +2,11 @@ package rss
 
 import rss.model.Post
 
-object PostRssReader {
+object RssReader {
     fun read(url: String): Post {
+
+
+
         TODO()
     }
 }
