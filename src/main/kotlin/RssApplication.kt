@@ -1,3 +1,5 @@
-fun main() {
+import rss.PostRssReader
 
+fun main() {
+    PostRssReader.read()
 }
