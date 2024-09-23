@@ -1,4 +1,10 @@
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
 import rss.RssReader
+import rss.model.RssNodes
+import kotlin.system.measureTimeMillis
 
 val SUBSCRIBE_URLS = listOf(
     "https://techblog.lycorp.co.jp/ko/feed/index.xml",
@@ -7,13 +13,21 @@ val SUBSCRIBE_URLS = listOf(
 )
 
 fun main() {
-    val posts = SUBSCRIBE_URLS.map { url ->
-        RssReader.read(url)
-    }.flatMap { rssNodes ->
-        rssNodes.toPosts()
-    }.sortedByDescending { it.createdAt }
+    runBlocking {
+        val times = measureTimeMillis {
+            val deferredPosts = SUBSCRIBE_URLS.map { url ->
+                async {
+                    RssReader.read(url)
+                }
+            }
 
-    posts.forEachIndexed { index, post ->
-        println("id: $index $post")
+            val rssNodes = deferredPosts.awaitAll()
+            val posts = rssNodes.flatMap { it.toPosts() }
+                .sortedByDescending { it.createdAt }
+            posts.forEachIndexed { index, post ->
+                println("id: $index $post")
+            }
+        }
+        println(times)
     }
 }
