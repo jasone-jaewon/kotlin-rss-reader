@@ -10,7 +10,7 @@ class PostController(
     private val postService: PostService
 ) {
 
-    suspend fun getAndSaveNewPosts(postMap: BlogPostMap): BlogPostMap = coroutineScope {
+    suspend fun saveNewPostsIfExists(postMap: BlogPostMap): BlogPostMap = coroutineScope {
         val newPostMap = postMap.mapValues { (blogType, posts) ->
             async {
                 postService.getNewPosts(blogType, posts)
