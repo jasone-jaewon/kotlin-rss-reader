@@ -8,7 +8,7 @@ class RssNodes(
     private val nodes: NodeList
 ) {
 
-    fun toPosts(): List<Post> {
+    fun toPosts(): Set<Post> {
         return (0 until nodes.length).map { i ->
             val item = nodes.item(i) as Element
             val title = item.getElementsByTagName("title").item(0).textContent
@@ -22,6 +22,6 @@ class RssNodes(
 
             val createdAt = item.getElementsByTagName("pubDate").item(0).textContent
             Post(title, link, parse(createdAt), createdBy)
-        }
+        }.toSet()
     }
 }
