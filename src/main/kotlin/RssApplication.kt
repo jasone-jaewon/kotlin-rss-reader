@@ -1,12 +1,8 @@
 import kotlinx.coroutines.runBlocking
 import rss.controller.PostController
 import rss.controller.RssController
-import rss.model.BlogType
-import rss.model.Post
 import rss.service.PostRepository
 import kotlin.system.measureTimeMillis
-
-val blogPostMap: Map<BlogType, Set<Post>> = mutableMapOf()
 
 val rssController = RssController()
 val postRepository = PostRepository()
@@ -20,20 +16,29 @@ fun main() {
                 .mapValues { it.value.toPosts() }
 
             // rss node 를 post로 저장
-            val newPostMap = postMap.mapValues {(blogType, posts) ->
+            val newPostMap = postMap.mapValues { (blogType, posts) ->
                 postController.getNewPosts(blogType, posts)
             }
 
-            newPostMap.forEach{ (blog, posts) ->
-                println("$blog have new posts.")
-                println(posts)
+            // 저장
+            newPostMap.forEach { (blogType, posts) ->
+                postController.savePosts(blogType, posts)
             }
 
+            newPostMap.forEach { (blog, posts) ->
+                println("##############################")
+                println("$blog have new posts.")
+                posts.forEach { post ->
+                    println("$post")
+                }
+            }
 
+            val posts = postMap.values.flatten().toList().sortedByDescending { it.createdAt }
             // 게시글을 읽어와서 출력
-//            posts.forEachIndexed { index, post ->
-//                println("id: $index $post")
-//            }
+            println("##############################")
+            posts.forEachIndexed { index, post ->
+                println("id: $index $post")
+            }
         }
         println(times)
     }

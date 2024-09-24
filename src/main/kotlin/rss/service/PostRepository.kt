@@ -13,6 +13,6 @@ class PostRepository {
     }
 
     suspend fun getPosts(blogType: BlogType): Set<Post> {
-        TODO()
+        return blogPostMap[blogType].orEmpty()
     }
 }

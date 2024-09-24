@@ -9,9 +9,10 @@ class PostController(
 ) {
     suspend fun getNewPosts(blogType: BlogType, posts: Set<Post>): Set<Post> {
         val savedPosts = postRepository.getPosts(blogType)
-        val newPosts = posts - savedPosts
-        // TODO: async
-        postRepository.savePosts(blogType, newPosts)
-        return newPosts
+        return posts - savedPosts
+    }
+
+    suspend fun savePosts(blogType: BlogType, posts: Set<Post>) {
+        postRepository.savePosts(blogType, posts)
     }
 }
