@@ -14,4 +14,8 @@ class PostService(private val postRepository: PostRepository) {
     suspend fun savePosts(blogType: BlogType, posts: Set<Post>) {
         postRepository.savePosts(blogType, posts)
     }
+
+    suspend fun getPosts(blogType: BlogType): Set<Post> {
+        return postRepository.getPosts(blogType)
+    }
 }
