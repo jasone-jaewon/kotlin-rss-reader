@@ -1,18 +1,26 @@
 package rss.controller
 
-import rss.model.BlogType
-import rss.model.Post
-import rss.service.PostRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import rss.service.PostService
+import types.BlogPostMap
 
 class PostController(
-    private val postRepository: PostRepository
+    private val postService: PostService
 ) {
-    suspend fun getNewPosts(blogType: BlogType, posts: Set<Post>): Set<Post> {
-        val savedPosts = postRepository.getPosts(blogType)
-        return posts - savedPosts
-    }
 
-    suspend fun savePosts(blogType: BlogType, posts: Set<Post>) {
-        postRepository.savePosts(blogType, posts)
+    suspend fun getAndSaveNewPosts(postMap: BlogPostMap): BlogPostMap = coroutineScope {
+        val newPostMap = postMap.mapValues { (blogType, posts) ->
+            async {
+                postService.getNewPosts(blogType, posts)
+            }
+        }
+        // 저장
+        newPostMap.forEach { (blogType, posts) ->
+            launch { postService.savePosts(blogType, posts.await()) }
+        }
+
+        newPostMap.mapValues { (_, deferred) -> deferred.await() }
     }
 }

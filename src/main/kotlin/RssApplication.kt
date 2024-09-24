@@ -1,12 +1,15 @@
+import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import rss.controller.PostController
 import rss.controller.RssController
-import rss.service.PostRepository
+import rss.repository.PostRepository
+import rss.service.PostService
 import kotlin.system.measureTimeMillis
 
 val rssController = RssController()
 val postRepository = PostRepository()
-val postController = PostController(postRepository)
+val postService = PostService(postRepository)
+val postController = PostController(postService)
 
 fun main() {
     runBlocking {
@@ -16,14 +19,7 @@ fun main() {
                 .mapValues { it.value.toPosts() }
 
             // rss node 를 post로 저장
-            val newPostMap = postMap.mapValues { (blogType, posts) ->
-                postController.getNewPosts(blogType, posts)
-            }
-
-            // 저장
-            newPostMap.forEach { (blogType, posts) ->
-                postController.savePosts(blogType, posts)
-            }
+            val newPostMap = postController.getAndSaveNewPosts(postMap)
 
             newPostMap.forEach { (blog, posts) ->
                 println("##############################")

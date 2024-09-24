@@ -1,4 +1,4 @@
-package rss.service
+package rss.repository
 
 import rss.model.BlogType
 import rss.model.Post
