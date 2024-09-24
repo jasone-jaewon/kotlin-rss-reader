@@ -1,4 +1,4 @@
-package rss
+package rss.service
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

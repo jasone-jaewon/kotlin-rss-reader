@@ -1,6 +1,7 @@
 package rss
 
 import org.junit.jupiter.api.Test
+import rss.service.RssReader
 
 class RssReaderTest {
     @Test

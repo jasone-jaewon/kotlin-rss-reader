@@ -1,27 +1,22 @@
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
-import rss.RssReader
+import rss.controller.RssController
 import rss.model.BlogType
 import rss.model.Post
 import kotlin.system.measureTimeMillis
 
 val blogPostMap: Map<BlogType, Set<Post>> = mutableMapOf()
 
+val rssController = RssController()
 
 fun main() {
     runBlocking {
         val times = measureTimeMillis {
             // rss read
-            val deferredPostMap = BlogType.values().associateWith { blog ->
-                val postReadJob = async {
-                    RssReader.read(blog.url)
-                }
-                postReadJob.await()
-            }
+            val rssNodeMap = rssController.readRssNodes()
 
+            // rss node 를 post로 저장
 
-            val rssPostMap = deferredPostMap.mapValues { (key, value) ->
+            val rssPostMap = rssNodeMap.mapValues { (key, value) ->
                 value.toPosts()
             }
 

@@ -21,3 +21,16 @@ val xml = factory.newDocumentBuilder()
 .parse("https://techblog.woowahan.com/feed")
 val channel = xml.getElementsByTagName("channel").item(0)
 ```
+
+
+// ---
+// RssController -> Rss -> Post
+// Post 를 저장
+// Post 목록을 조회
+// 출력
+// ---
+// 10분 주기로 돌면서 새 게시글 노티
+// 신규 post = Rss 가져온 것 - 기존 Post 목록
+// 신규 Post 저장
+// 신규 post 노티
+// ---
