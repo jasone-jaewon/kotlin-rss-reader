@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import rss.model.BlogType
-import rss.model.Post
 import rss.repository.PostRepository
+import util.testPost
 import java.time.ZonedDateTime
 
 
@@ -73,17 +73,4 @@ class PostServiceTest {
         // then
         newPosts shouldBe expected
     }
-
-
-    private fun testPost(
-        title: String = "",
-        link: String = "",
-        createdAt: ZonedDateTime = ZonedDateTime.now(),
-        creator: String? = ""
-    ) = Post(
-        title = title,
-        link = link,
-        createdAt = createdAt,
-        createdBy = creator
-    )
 }
